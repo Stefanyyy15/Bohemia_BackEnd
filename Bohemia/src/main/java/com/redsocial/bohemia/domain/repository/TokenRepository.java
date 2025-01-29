@@ -1,13 +1,16 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.redsocial.bohemia.domain.repository;
 
-/**
- *
- * @author yulie
- */
-public class TokenRepository {
-    
+import com.redsocial.bohemia.persistence.entity.Token;
+import com.redsocial.bohemia.persistence.entity.User;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
+import java.util.Optional;
+
+@Repository
+public interface TokenRepository extends JpaRepository<Token, Long> {
+    List<Token> findByUser(User user);
+    Optional<Token> findByToken(String token);
+    void deleteByUser(User user);
 }
