@@ -23,7 +23,7 @@ public class BohemiaApplication {
         UserServiceImpl userService = context.getBean(UserServiceImpl.class);
 
 //     User newUser = new User();
-//     newUser.setFullname("Kevin Steve Romero Santacruz");
+//     newUser.setFullname("Kevin Stev Romero Santacruz");
 //     newUser.setUsername("Kevin_123");
 //    newUser.setMail("PazEnElAriporo@email.com");
 //     newUser.setPassword("hola415");
