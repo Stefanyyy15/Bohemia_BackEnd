@@ -10,6 +10,9 @@ import java.time.LocalDateTime;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.annotation.Bean;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @SpringBootApplication
 public class BohemiaApplication {
@@ -19,7 +22,6 @@ public class BohemiaApplication {
         CommentService commentService = context.getBean(CommentService.class);
         UserServiceImpl userService = context.getBean(UserServiceImpl.class);
 
-        
 //     User newUser = new User();
 //     newUser.setFullname("Kevin Steve Romero Santacruz");
 //     newUser.setUsername("Kevin_123");
@@ -31,6 +33,8 @@ public class BohemiaApplication {
 //
 //    userService.saveUser(newUser);
     }
+    
+ 
 
     //        1. Agregar admin
 //       Comment com = new Comment();
@@ -38,4 +42,5 @@ public class BohemiaApplication {
 //       com.setcommentDate("");
 //       com.setcomment("Ay, pero por Dios que hermosa");
 //       commentService.saveComment(com);
+    
 }
