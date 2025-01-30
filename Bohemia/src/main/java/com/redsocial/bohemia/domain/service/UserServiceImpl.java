@@ -117,4 +117,18 @@ public class UserServiceImpl implements UserService {
             userRepository.save(followUser);
         }
     }
+    
+      public boolean verifyUser(String name, String password) {
+    User verifi = userRepository.findByMail(name).get();
+    
+    if (verifi == null) {
+        return false; 
+    }
+
+    if (!verifi.getPassword().equals(password)) {
+        return false; 
+    }
+    
+    return true; 
+}
 }

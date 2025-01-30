@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 @RestController
-@RequestMapping("/api/usuario")
+@RequestMapping("/api/users")
 public class UserController {
 
     private final UserServiceImpl userImpl;
@@ -26,8 +26,8 @@ public class UserController {
     }
 
     @GetMapping
-    public List<User> getAllUsuarios() {
-        return userImpl.listUser();
+    public List<User> getAllUsers() {
+        return userImpl.listUsers();
     }
 
     @GetMapping("/{id}")
@@ -35,9 +35,9 @@ public class UserController {
         return userImpl.findUser(id);
     }
 
-    @GetMapping("/correo/{correo}")
-    public Optional<User> getfindUserByMail(@PathVariable String correo) {
-        return userImpl.findByMail(mail);
+    @GetMapping("/mail/{mail}")
+    public Optional<User> getfindUserByMail(@PathVariable String mail) {
+        return userImpl.findUserByMail(mail);
     }
 
     @PostMapping(consumes = "application/json", produces = "application/json")
@@ -47,6 +47,6 @@ public class UserController {
 
     @DeleteMapping("/{id}")
     public void deleteUsuario(@PathVariable Long id) {
-        usuarioImpl.deleteUsuario(id);  // Aquí llamas al método para eliminar el usuario
+        userImpl.deleteUser(id);  
     }
 }
