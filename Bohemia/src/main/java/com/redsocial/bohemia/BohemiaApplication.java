@@ -22,16 +22,16 @@ public class BohemiaApplication {
         CommentService commentService = context.getBean(CommentService.class);
         UserServiceImpl userService = context.getBean(UserServiceImpl.class);
 
-//     User newUser = new User();
-//     newUser.setFullname("Kevin Stev Romero Santacruz");
-//     newUser.setUsername("Kevin_123");
-//    newUser.setMail("PazEnElAriporo@email.com");
-//     newUser.setPassword("hola415");
-//     newUser.setProfilePhoto("photo.jpg");
-//     newUser.setBiography("No se que voy a poner aqui");
-//     newUser.setPost(1L);
-//
-//    userService.saveUser(newUser);
+     User newUser = new User();
+     newUser.setFullname("Kevin Stev Romero Santacruz");
+     newUser.setUsername("Kevin_123");
+    newUser.setMail("PazEnElAriporo@email.com");
+     newUser.setPassword("hola415");
+     newUser.setProfilePhoto("photo.jpg");
+     newUser.setBiography("No se que voy a poner aqui");
+////     newUser.setPost(1L);
+
+    userService.saveUser(newUser);
     }
     
  

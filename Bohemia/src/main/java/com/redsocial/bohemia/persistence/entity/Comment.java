@@ -19,6 +19,7 @@ public class Comment {
     private Date commentDate;
     @Column(columnDefinition = "TEXT")
     private String comment;
+    @Column(nullable = true)
     private int likes;
     @ManyToOne
     @JoinColumn(name = "id_post")

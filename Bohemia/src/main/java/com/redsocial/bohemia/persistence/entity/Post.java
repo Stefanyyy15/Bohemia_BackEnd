@@ -19,7 +19,7 @@ public class Post {
 
     @NotNull
     private String content;
-
+    @Column(nullable = true)
     private String image;
 
     @ManyToOne
