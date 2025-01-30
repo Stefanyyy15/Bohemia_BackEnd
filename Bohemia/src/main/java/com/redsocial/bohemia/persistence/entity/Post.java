@@ -1,8 +1,8 @@
-
 package com.redsocial.bohemia.persistence.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -12,21 +12,28 @@ import java.util.List;
 public class Post {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id_post;
+    private Long postId;
+
     @Temporal(TemporalType.DATE)
     private Date publicationDate;
+
+    @NotNull
     private String content;
+
     private String image;
+
     @ManyToOne
     @JoinColumn(name = "id_user", nullable = false)
     private User user;
 
-    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
-    private List<Comment> comments;
+    @JsonIgnore
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Comment> comments = new ArrayList<>();
 
-    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
-    private List<Reaction> reactions;
-    
+    @JsonIgnore
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Reaction> reactions = new ArrayList<>();
+
     @PrePersist
     public void prePersist() {
         this.publicationDate = new Date();
@@ -35,29 +42,18 @@ public class Post {
     public Post() {
     }
 
-    public Post(Date publicationDate, String content, String image, User user, List<Comment> comments, List<Reaction> reactions) {
-        this.publicationDate = publicationDate;
+    public Post(String content, String image, User user) {
         this.content = content;
         this.image = image;
         this.user = user;
-        this.comments = comments;
-        this.reactions = reactions;
     }
 
-    public String getImage() {
-        return image;
+    public Long getPostId() {
+        return postId;
     }
 
-    public void setImage(String image) {
-        this.image = image;
-    }
-
-    public Long getId_post() {
-        return id_post;
-    }
-
-    public void setId_post(Long id_post) {
-        this.id_post = id_post;
+    public void setPostId(Long postId) {
+        this.postId = postId;
     }
 
     public Date getPublicationDate() {
@@ -74,6 +70,14 @@ public class Post {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 
     public User getUser() {
@@ -100,10 +104,10 @@ public class Post {
         this.reactions = reactions;
     }
 
+
     @Override
     public String toString() {
-        return "Post{" + "id_post=" + id_post + ", publicationDate=" + publicationDate + ", content=" + content + ", image=" + image + ", user=" + user + ", comments=" + comments + ", reactions=" + reactions + '}';
+        return "Post{" + "postId=" + postId + ", publicationDate=" + publicationDate + ", content=" + content + ", image=" + image + ", user=" + user + ", comments=" + comments + ", reactions=" + reactions + '}';
     }
-
     
 }
