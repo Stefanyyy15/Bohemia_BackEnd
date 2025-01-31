@@ -22,13 +22,13 @@ public class LoginController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login(
-            @RequestParam("correo") String correo,
-            @RequestParam("contrasena") String contrasena) {
+            @RequestParam("mail") String mail,
+            @RequestParam("password") String password) {
 
-        if (imp.verifyUser(correo, contrasena)) {
-            String token = jwtAuthtenticationConfig.getJWTToken(correo);
+        if (imp.verifyUser(mail, password)) {
+            String token = jwtAuthtenticationConfig.getJWTToken(mail);
 
-            UserS user = new UserS(correo, contrasena, token);
+            UserS user = new UserS(mail, password, token);
             return ResponseEntity.ok(user);
         }
         return null;
