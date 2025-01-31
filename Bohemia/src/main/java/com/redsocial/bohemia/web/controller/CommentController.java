@@ -2,6 +2,7 @@ package com.redsocial.bohemia.web.controller;
 
 import com.redsocial.bohemia.domain.service.CommentServiceImpl;
 import com.redsocial.bohemia.persistence.entity.Comment;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,5 +43,26 @@ public class CommentController {
     @DeleteMapping("/{id}")
     public void delComment(@PathVariable Long id) {
         commentImpl.delComment(id);  
+    }
+    
+    public static class CommentUpdateRequest {
+        private String comment;
+        private Date commentDate;
+
+        public String getComment() {
+            return comment;
+        }
+
+        public void setComment(String comment) {
+            this.comment = comment;
+        }
+
+        public Date getCommentDate() {
+            return commentDate;
+        }
+
+        public void setCommentDate(Date commentDate) {
+            this.commentDate = commentDate;
+        }
     }
 }

@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -16,22 +17,24 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping
 public class PostController {
+
     private final PostServiceImpl postImpl;
-    
+
     @Autowired
-    public PostController(PostServiceImpl postImpl){
+    public PostController(PostServiceImpl postImpl) {
         this.postImpl = postImpl;
     }
-    
+
     @GetMapping
     public List<Post> getAllPost() {
         return postImpl.listPost();
     }
-    
+
     @GetMapping("/{id}")
     public Optional<Post> getPostById(@PathVariable Long id) {
         return postImpl.findPost(id);
-    }    
+    }
+
     @PostMapping(consumes = "application/json", produces = "application/json")
     public Post createPost(@RequestBody Post post) {
         return postImpl.savePost(post);
@@ -39,7 +42,19 @@ public class PostController {
 
     @DeleteMapping("/{id}")
     public void deletePost(@PathVariable Long id) {
-        postImpl.delPost(id);  
+        postImpl.delPost(id);
+    }
+
+    @PutMapping("/{id}")
+    public Post updatePost(
+            @PathVariable Long id,
+            @RequestBody Post post) {
+        return postImpl.updatePost(
+                id,
+                post.getPublicationDate(),
+                post.getContent(),
+                post.getImage()
+        );
     }
     
 }

@@ -11,4 +11,5 @@ public interface TokenService {
     void revokeToken(String token);
     boolean isTokenExpired(String token);
     void deleteToken(Long tokenId);
+    Token updateToken(Long tokenId, String newTokenValue, Long userId, LocalDateTime newExpiresAt);
 }

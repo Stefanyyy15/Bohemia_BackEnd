@@ -57,12 +57,32 @@ public class TokenServiceImpl implements TokenService {
             Token existingToken = tokenOpt.get();
             return existingToken.getExpiresAt().isBefore(LocalDateTime.now());
         }
-        return false; 
+        return false;
     }
 
     @Override
     public void deleteToken(Long tokenId) {
         tokenRepository.deleteById(tokenId);
+    }
+
+    @Transactional
+    @Override
+    public Token updateToken(Long tokenId, String newTokenValue, Long userId, LocalDateTime newExpiresAt) {
+        Optional<Token> tokenOpt = tokenRepository.findById(tokenId);
+        Optional<User> userOpt = userRepository.findById(userId);
+
+        if (tokenOpt.isPresent() && userOpt.isPresent()) {
+            Token token = tokenOpt.get();
+            User user = userOpt.get();
+
+            token.setToken(newTokenValue);
+            token.setUser(user);
+            token.setExpiresAt(newExpiresAt);
+
+            return tokenRepository.save(token);
+        }
+        System.out.println("Token with ID " + tokenId + " or User with ID " + userId + " not found.");
+        return null;
     }
 }
 
