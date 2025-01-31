@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/notification")
+@RequestMapping("/api/reaction")
 public class ReactionController {
     
     private final ReactionServiceImpl reactionImpl;

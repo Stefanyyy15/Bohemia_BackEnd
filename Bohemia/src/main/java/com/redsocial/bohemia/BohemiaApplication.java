@@ -33,14 +33,10 @@ public class BohemiaApplication {
 //
 //    userService.saveUser(newUser);
     }
-    
- 
-
     //        1. Agregar admin
 //       Comment com = new Comment();
 //       com.setid_user(1);
 //       com.setcommentDate("");
 //       com.setcomment("Ay, pero por Dios que hermosa");
 //       commentService.saveComment(com);
-    
 }
