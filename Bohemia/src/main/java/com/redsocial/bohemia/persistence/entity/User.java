@@ -37,6 +37,7 @@ public class User {
     private String profilePhoto;
     @Column(columnDefinition = "TEXT", nullable = true)
     private String biography;
+    private String token;
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Post> posts;
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
@@ -68,6 +69,20 @@ public class User {
         this.posts = posts;
         this.comments = comments;
         this.notifications = notifications;
+    }
+
+    public User(String mail, String password, String token) {
+        this.mail = mail;
+        this.password = password;
+        this.token = token;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 
     public Long getId_user() {
