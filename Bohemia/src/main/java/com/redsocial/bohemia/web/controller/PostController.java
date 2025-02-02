@@ -1,5 +1,6 @@
 package com.redsocial.bohemia.web.controller;
 
+import com.redsocial.bohemia.domain.repository.PostRepository;
 import com.redsocial.bohemia.domain.service.PostServiceImpl;
 import com.redsocial.bohemia.persistence.entity.Post;
 import java.util.List;
@@ -19,6 +20,9 @@ import org.springframework.web.bind.annotation.RestController;
 public class PostController {
 
     private final PostServiceImpl postImpl;
+    
+    @Autowired
+    private PostRepository postRepository;
 
     @Autowired
     public PostController(PostServiceImpl postImpl) {
@@ -56,5 +60,4 @@ public class PostController {
                 post.getImage()
         );
     }
-    
 }

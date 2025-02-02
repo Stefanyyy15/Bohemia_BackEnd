@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Optional;
 
 public interface UserService {
-
     User saveUser(User user);
     void deleteUser(Long userId);
     List<User> listUsers();
@@ -16,6 +15,7 @@ public interface UserService {
     Optional<User> updateUser(Long userId, String fullname, String username, String mail, String password, String profilePhoto, String biography);
     List<User> getUsersFollowing(Long userId);
     List<User> getUsersFollowers(Long userId);
-    void followUser(Long userId, Long followUserId);
-    void unfollowUser(Long userId, Long followUserId);
+    boolean followUser(Long currentUserId, Long targetUserId);
+    boolean unfollowUser(Long currentUserId, Long targetUserId);
+    Optional<User> searchUsersByUsername(String username);
 }

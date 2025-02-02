@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -130,39 +131,62 @@ public class UserController {
             this.biography = biography;
         }
     }
+    
+    @GetMapping("/username/{username}")
+    public Optional<User> getfindUserByUsername(@PathVariable String username) {
+        return userImpl.findUserByUsername(username);
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<Optional<User>> searchUsersByUsername(@RequestParam String term) {
+        Optional<User> users = userImpl.searchUsersByUsername(term);
+        return ResponseEntity.ok(users);
+    }
+
+    @PostMapping("/{currentUserId}/follow/{targetUserId}")
+    public ResponseEntity<String> followUser(@PathVariable Long currentUserId, @PathVariable Long targetUserId) {
+        boolean success = userImpl.followUser(currentUserId, targetUserId);
+        return success ? ResponseEntity.ok("Seguido correctamente") : ResponseEntity.badRequest().body("No se pudo seguir");
+    }
+
+    @PostMapping("/{currentUserId}/unfollow/{targetUserId}")
+    public ResponseEntity<String> unfollowUser(@PathVariable Long currentUserId, @PathVariable Long targetUserId) {
+        boolean success = userImpl.unfollowUser(currentUserId, targetUserId);
+        return success ? ResponseEntity.ok("Dejado de seguir correctamente") : ResponseEntity.badRequest().body("No se pudo dejar de seguir");
+    }
 
     @GetMapping("/profile")
-public ResponseEntity<?> getUserProfile(HttpServletRequest request) {
-    String token = request.getHeader("Authorization");
-    Map<String, Object> response = new HashMap<>();
-    
-    if (token != null && token.startsWith("Bearer ")) {
-        token = token.substring(7);
-        try {
-            // Extraer el email del token
-            String email = jwtAuthtenticationConfig.extractUsername(token);
-            System.out.println("Email extraído del token: " + email); // Para debug
-            
-            // Buscar el usuario específico por el email del token
-            Optional<User> user = userImpl.findUserByMail(email);
-            
-            if (user.isPresent()) {
-                // Verificar que el token del usuario coincida
-                response.put("user", user.get());
-                return ResponseEntity.ok(response);
-            } else {
-                response.put("error", "Usuario no encontrado para el token proporcionado");
-                return ResponseEntity.status(404).body(response);
+    public ResponseEntity<?> getUserProfile(HttpServletRequest request) {
+        String token = request.getHeader("Authorization");
+        Map<String, Object> response = new HashMap<>();
+
+        if (token != null && token.startsWith("Bearer ")) {
+            token = token.substring(7);
+            try {
+                // Extraer el email del token
+                String email = jwtAuthtenticationConfig.extractUsername(token);
+                System.out.println("Email extraído del token: " + email); // Para debug
+
+                // Buscar el usuario específico por el email del token
+                Optional<User> user = userImpl.findUserByMail(email);
+
+                if (user.isPresent()) {
+                    // Verificar que el token del usuario coincida
+                    response.put("user", user.get());
+                    return ResponseEntity.ok(response);
+                } else {
+                    response.put("error", "Usuario no encontrado para el token proporcionado");
+                    return ResponseEntity.status(404).body(response);
+                }
+            } catch (Exception e) {
+                System.out.println("Error al procesar el token: " + e.getMessage()); // Para debug
+                response.put("error", "Token inválido o expirado");
+                return ResponseEntity.status(400).body(response);
             }
-        } catch (Exception e) {
-            System.out.println("Error al procesar el token: " + e.getMessage()); // Para debug
-            response.put("error", "Token inválido o expirado");
-            return ResponseEntity.status(400).body(response);
         }
+
+        response.put("error", "Token no proporcionado");
+        return ResponseEntity.status(401).body(response);
     }
-    
-    response.put("error", "Token no proporcionado");
-    return ResponseEntity.status(401).body(response);
-}
 
 }

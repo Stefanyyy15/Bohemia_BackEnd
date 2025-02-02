@@ -85,40 +85,47 @@ public class UserServiceImpl implements UserService {
         return List.of();
     }
 
-    @Transactional
     @Override
-    public void followUser(Long userId, Long followUserId) {
-        Optional<User> userOpt = userRepository.findById(userId);
-        Optional<User> followUserOpt = userRepository.findById(followUserId);
-
-        if (userOpt.isPresent() && followUserOpt.isPresent()) {
-            User user = userOpt.get();
-            User followUser = followUserOpt.get();
-
-            user.getFollowing().add(followUser);
-            followUser.getFollowers().add(user);
-
-            userRepository.save(user);
-            userRepository.save(followUser);
-        }
+    public Optional<User> searchUsersByUsername(String username) {
+        return userRepository.findByUsername(username);
     }
 
     @Transactional
     @Override
-    public void unfollowUser(Long userId, Long followUserId) {
-        Optional<User> userOpt = userRepository.findById(userId);
-        Optional<User> followUserOpt = userRepository.findById(followUserId);
+    public boolean followUser(Long currentUserId, Long targetUserId) {
+        Optional<User> currentUserOpt = userRepository.findById(currentUserId);
+        Optional<User> targetUserOpt = userRepository.findById(targetUserId);
 
-        if (userOpt.isPresent() && followUserOpt.isPresent()) {
-            User user = userOpt.get();
-            User followUser = followUserOpt.get();
+        if (currentUserOpt.isPresent() && targetUserOpt.isPresent()) {
+            User currentUser = currentUserOpt.get();
+            User targetUser = targetUserOpt.get();
 
-            user.getFollowing().remove(followUser);
-            followUser.getFollowers().remove(user);
-
-            userRepository.save(user);
-            userRepository.save(followUser);
+            if (!currentUser.getFollowing().contains(targetUser)) {
+                currentUser.getFollowing().add(targetUser);
+                userRepository.save(currentUser);
+                return true;
+            }
         }
+        return false;
+    }
+
+    @Transactional
+    @Override
+    public boolean unfollowUser(Long currentUserId, Long targetUserId) {
+        Optional<User> currentUserOpt = userRepository.findById(currentUserId);
+        Optional<User> targetUserOpt = userRepository.findById(targetUserId);
+
+        if (currentUserOpt.isPresent() && targetUserOpt.isPresent()) {
+            User currentUser = currentUserOpt.get();
+            User targetUser = targetUserOpt.get();
+
+            if (currentUser.getFollowing().contains(targetUser)) {
+                currentUser.getFollowing().remove(targetUser);
+                userRepository.save(currentUser);
+                return true;
+            }
+        }
+        return false;
     }
 
     public boolean verifyUser(String name, String password) {

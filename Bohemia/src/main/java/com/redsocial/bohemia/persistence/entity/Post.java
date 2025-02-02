@@ -1,6 +1,7 @@
 package com.redsocial.bohemia.persistence.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import java.util.ArrayList;
@@ -10,6 +11,7 @@ import java.util.List;
 @Entity
 @Table(name = "post")
 public class Post {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long postId;
@@ -79,7 +81,7 @@ public class Post {
     public void setImage(String image) {
         this.image = image;
     }
-
+    
     public User getUser() {
         return user;
     }
@@ -104,10 +106,9 @@ public class Post {
         this.reactions = reactions;
     }
 
-
     @Override
     public String toString() {
         return "Post{" + "postId=" + postId + ", publicationDate=" + publicationDate + ", content=" + content + ", image=" + image + ", user=" + user + ", comments=" + comments + ", reactions=" + reactions + '}';
     }
-    
+
 }

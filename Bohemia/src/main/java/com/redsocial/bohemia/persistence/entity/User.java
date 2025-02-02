@@ -38,6 +38,7 @@ public class User {
     @Column(columnDefinition = "TEXT", nullable = true)
     private String biography;
     private String token;
+    @JsonIgnore
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Post> posts;
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
