@@ -2,9 +2,12 @@ package com.redsocial.bohemia.domain.service;
 
 import com.redsocial.bohemia.persistence.entity.User;
 import com.redsocial.bohemia.domain.repository.UserRepository;
+import com.redsocial.bohemia.domain.security.Constants;
+import io.jsonwebtoken.Claims;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import io.jsonwebtoken.Jwts;
 
 import java.util.List;
 import java.util.Optional;
@@ -70,7 +73,7 @@ public class UserServiceImpl implements UserService {
         if (userOpt.isPresent()) {
             return userOpt.get().getFollowing();
         }
-        return List.of(); 
+        return List.of();
     }
 
     @Override
@@ -79,7 +82,7 @@ public class UserServiceImpl implements UserService {
         if (userOpt.isPresent()) {
             return userOpt.get().getFollowers();
         }
-        return List.of(); 
+        return List.of();
     }
 
     @Transactional
@@ -117,18 +120,18 @@ public class UserServiceImpl implements UserService {
             userRepository.save(followUser);
         }
     }
-    
-      public boolean verifyUser(String name, String password) {
-    User verifi = userRepository.findByMail(name).get();
-    
-    if (verifi == null) {
-        return false; 
-    }
 
-    if (!verifi.getPassword().equals(password)) {
-        return false; 
+    public boolean verifyUser(String name, String password) {
+        User verifi = userRepository.findByMail(name).get();
+
+        if (verifi == null) {
+            return false;
+        }
+
+        if (!verifi.getPassword().equals(password)) {
+            return false;
+        }
+
+        return true;
     }
-    
-    return true; 
-}
 }

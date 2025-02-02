@@ -23,24 +23,35 @@ public class LoginController {
     private UserServiceImpl imp;
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(
-            @RequestParam("mail") String mail,
-            @RequestParam("password") String password) {
+public ResponseEntity<?> login(
+        @RequestParam("mail") String mail,
+        @RequestParam("password") String password) {
 
-        if (imp.verifyUser(mail, password)) {
-            String token = jwtAuthtenticationConfig.getJWTToken(mail);
+    if (imp.verifyUser(mail, password)) {
+        String token = jwtAuthtenticationConfig.getJWTToken(mail);
+
+        // Obtener el usuario desde la base de datos
+        Optional<User> userOptional = imp.findUserByMail(mail);
+
+        if (userOptional.isPresent()) {
+            User user = userOptional.get();
             
-            Optional<User> user = imp.findUserByMail(mail);
-            
+            // Asignar el token al usuario
+            user.setToken(token); // Asegúrate de que tu clase User tenga un campo 'token' con un setter
+
+            // Crear la respuesta con el usuario y el token
             Map<String, Object> response = new HashMap<>();
-            response.put("user", user);
-            response.put("token", token);
+            response.put("user", user); // Devolver el usuario con el token
+            response.put("token", token); // Incluir el token en la respuesta
 
             return ResponseEntity.ok(response);
+        } else {
+            return ResponseEntity.status(404).body("Usuario no encontrado");
         }
-        return null;
-
     }
+    return ResponseEntity.status(400).body("Credenciales incorrectas");
+}
+
 
 }
 
