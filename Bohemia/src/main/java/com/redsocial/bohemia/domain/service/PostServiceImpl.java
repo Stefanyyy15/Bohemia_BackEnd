@@ -2,6 +2,7 @@ package com.redsocial.bohemia.domain.service;
 
 import com.redsocial.bohemia.domain.repository.PostRepository;
 import com.redsocial.bohemia.persistence.entity.Post;
+import com.redsocial.bohemia.persistence.entity.User;
 import jakarta.transaction.Transactional;
 import java.util.Date;
 import java.util.List;
@@ -35,6 +36,13 @@ public class PostServiceImpl implements PostService {
         return postRepository.findById(postId);
     }
 
+    public List<Post> getPostsByUser(Long id_user) {
+        // Primero necesitamos obtener el User
+        User user = new User();
+        user.setId_user(id_user);
+        return postRepository.findByUser(user);
+    }
+
     @Transactional
     @Override
     public Post updatePost(Long postId, Date newPublicationDate, String newContent, String newImage) {
@@ -45,12 +53,10 @@ public class PostServiceImpl implements PostService {
             post.setPublicationDate(newPublicationDate);
             post.setContent(newContent);
             post.setImage(newImage);
-            return postRepository.save(post); 
+            return postRepository.save(post);
         }
         System.out.println("Post with ID " + postId + " not found.");
-        return null; 
+        return null;
     }
-    
-    
 
 }

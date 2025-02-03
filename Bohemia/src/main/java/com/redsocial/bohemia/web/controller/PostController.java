@@ -6,6 +6,8 @@ import com.redsocial.bohemia.persistence.entity.Post;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,9 +22,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class PostController {
 
     private final PostServiceImpl postImpl;
-    
-    @Autowired
-    private PostRepository postRepository;
 
     @Autowired
     public PostController(PostServiceImpl postImpl) {
@@ -33,6 +32,11 @@ public class PostController {
     public List<Post> getAllPost() {
         return postImpl.listPost();
     }
+
+    @GetMapping("/user/{id_user}")
+public List<Post> getPostsByUser(@PathVariable Long id_user) {
+    return postImpl.getPostsByUser(id_user);
+}
 
     @GetMapping("/{id}")
     public Optional<Post> getPostById(@PathVariable Long id) {

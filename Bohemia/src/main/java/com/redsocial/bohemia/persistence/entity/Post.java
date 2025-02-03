@@ -16,7 +16,7 @@ public class Post {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long postId;
 
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date publicationDate;
 
     @NotNull
@@ -81,7 +81,7 @@ public class Post {
     public void setImage(String image) {
         this.image = image;
     }
-    
+
     public User getUser() {
         return user;
     }

@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -62,8 +63,8 @@ public class UserController {
     }
 
     @PutMapping(value = "/{id}", consumes = "application/json", produces = "application/json")
-    public Optional<User> updateUser(@PathVariable Long id, @RequestBody UserUpdateRequest request) {
-        return userImpl.updateUser(
+    public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody User request) {
+        Optional<User> updatedUser = userImpl.updateUser(
                 id,
                 request.getFullname(),
                 request.getUsername(),
@@ -72,66 +73,14 @@ public class UserController {
                 request.getProfilePhoto(),
                 request.getBiography()
         );
+
+        if (!updatedUser.isPresent()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build(); // Usuario no encontrado
+        }
+
+        return ResponseEntity.ok(updatedUser.get()); // Devuelve el usuario actualizado
     }
 
-    public static class UserUpdateRequest {
-
-        private String fullname;
-        private String username;
-        private String mail;
-        private String password;
-        private String profilePhoto;
-        private String biography;
-
-        public String getFullname() {
-            return fullname;
-        }
-
-        public void setFullname(String fullname) {
-            this.fullname = fullname;
-        }
-
-        public String getUsername() {
-            return username;
-        }
-
-        public void setUsername(String username) {
-            this.username = username;
-        }
-
-        public String getMail() {
-            return mail;
-        }
-
-        public void setMail(String mail) {
-            this.mail = mail;
-        }
-
-        public String getPassword() {
-            return password;
-        }
-
-        public void setPassword(String password) {
-            this.password = password;
-        }
-
-        public String getProfilePhoto() {
-            return profilePhoto;
-        }
-
-        public void setProfilePhoto(String profilePhoto) {
-            this.profilePhoto = profilePhoto;
-        }
-
-        public String getBiography() {
-            return biography;
-        }
-
-        public void setBiography(String biography) {
-            this.biography = biography;
-        }
-    }
-    
     @GetMapping("/username/{username}")
     public Optional<User> getfindUserByUsername(@PathVariable String username) {
         return userImpl.findUserByUsername(username);
