@@ -2,12 +2,9 @@ package com.redsocial.bohemia.domain.service;
 
 import com.redsocial.bohemia.persistence.entity.User;
 import com.redsocial.bohemia.domain.repository.UserRepository;
-import com.redsocial.bohemia.domain.security.Constants;
-import io.jsonwebtoken.Claims;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import io.jsonwebtoken.Jwts;
 
 import java.util.List;
 import java.util.Optional;
@@ -141,4 +138,6 @@ public class UserServiceImpl implements UserService {
 
         return true;
     }
+    
+   
 }

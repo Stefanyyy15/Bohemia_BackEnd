@@ -1,27 +1,18 @@
 package com.redsocial.bohemia.web.controller;
 
-import com.redsocial.bohemia.domain.repository.PostRepository;
 import com.redsocial.bohemia.domain.service.PostServiceImpl;
 import com.redsocial.bohemia.persistence.entity.Post;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/post")
 public class PostController {
 
     private final PostServiceImpl postImpl;
+
 
     @Autowired
     public PostController(PostServiceImpl postImpl) {
@@ -34,9 +25,9 @@ public class PostController {
     }
 
     @GetMapping("/user/{id_user}")
-public List<Post> getPostsByUser(@PathVariable Long id_user) {
-    return postImpl.getPostsByUser(id_user);
-}
+    public List<Post> getPostsByUser(@PathVariable Long id_user) {
+        return postImpl.getPostsByUser(id_user);
+    }
 
     @GetMapping("/{id}")
     public Optional<Post> getPostById(@PathVariable Long id) {
@@ -64,4 +55,6 @@ public List<Post> getPostsByUser(@PathVariable Long id_user) {
                 post.getImage()
         );
     }
+
+
 }
