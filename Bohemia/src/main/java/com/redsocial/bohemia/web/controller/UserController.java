@@ -33,8 +33,28 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public Optional<User> getUserById(@PathVariable Long id) {
-        return userImpl.findUser(id);
+    public ResponseEntity<Map<String, Object>> getUserById(@PathVariable Long id) {
+        Optional<User> userOptional = userImpl.findUser(id);
+
+        if (!userOptional.isPresent()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+
+        User user = userOptional.get();
+        List<User> followers = userImpl.getUsersFollowers(id);
+        List<User> following = userImpl.getUsersFollowing(id); // Agrega este método en el servicio si no existe
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("id_user", user.getId_user());
+        response.put("fullname", user.getFullname());
+        response.put("username", user.getUsername());
+        response.put("mail", user.getMail());
+        response.put("profilePhoto", user.getProfilePhoto());
+        response.put("biography", user.getBiography());
+        response.put("followers", followers);
+        response.put("following", following);
+
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/mail/{mail}")

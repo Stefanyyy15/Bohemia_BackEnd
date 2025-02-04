@@ -45,17 +45,18 @@ public class User {
     private List<Comment> comments;
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Notification> notifications;
-     @ManyToMany
-    @JoinTable(
-        name = "followers", 
-        joinColumns = @JoinColumn(name = "id_user"), 
-        inverseJoinColumns = @JoinColumn(name = "id_follower")
-    )
+    @ManyToMany
     @JsonIgnore
-    private List<User> following = new ArrayList<>();
+    @JoinTable(
+        name = "user_following",
+        joinColumns = @JoinColumn(name = "user_id"),
+        inverseJoinColumns = @JoinColumn(name = "following_user_id")
+    )
+    private List<User> following; // Lista de usuarios a los que este usuario sigue
+
     @ManyToMany(mappedBy = "following")
     @JsonIgnore
-    private List<User> followers = new ArrayList<>();
+    private List<User> followers; // Lista de seguidores de este usuario
 
     public User() {
     }
