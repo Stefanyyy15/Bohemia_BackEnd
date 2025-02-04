@@ -50,13 +50,13 @@ public class PostServiceImpl implements PostService {
 
         if (postOpt.isPresent()) {
             Post post = postOpt.get();
-            post.setPublicationDate(newPublicationDate);
+            post.setPublicationDate(new Date());
             post.setContent(newContent);
             post.setImage(newImage);
             return postRepository.save(post);
         }
-        System.out.println("Post with ID " + postId + " not found.");
-        return null;
+
+        throw new RuntimeException("Post with ID " + postId + " not found.");
     }
 
 }
