@@ -82,6 +82,16 @@ public class UserController {
         return ResponseEntity.ok(users);
     }
 
+    @GetMapping("/{userId}/followers")
+    public ResponseEntity<List<User>> getFollowers(@PathVariable Long userId) {
+        List<User> followers = userImpl.getUsersFollowers(userId);
+        if (followers != null && !followers.isEmpty()) {
+            return ResponseEntity.ok(followers);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
     @PostMapping("/{currentUserId}/follow/{targetUserId}")
     public ResponseEntity<String> followUser(@PathVariable Long currentUserId, @PathVariable Long targetUserId) {
         boolean success = userImpl.followUser(currentUserId, targetUserId);
@@ -128,5 +138,4 @@ public class UserController {
         return ResponseEntity.status(401).body(response);
     }
 
-  
 }
