@@ -17,7 +17,12 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public Comment saveComment(Comment comment) {
-        return commentRepository.save(comment);
+        try {
+            return commentRepository.save(comment);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException("Error al guardar el comentario");
+        }
     }
 
     @Override

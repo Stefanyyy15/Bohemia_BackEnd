@@ -37,15 +37,22 @@ public class CommentController {
 
     @PostMapping(consumes = "application/json", produces = "application/json")
     public Comment createComment(@RequestBody Comment com) {
+        if (com.getComment() == null || com.getComment().trim().isEmpty()) {
+            throw new IllegalArgumentException("El comentario no puede estar vacío");
+        }
+        if (com.getUser() == null || com.getPost() == null) {
+            throw new IllegalArgumentException("El comentario debe estar asociado a un usuario y un post");
+        }
         return commentImpl.saveComment(com);
     }
-    
+
     @DeleteMapping("/{id}")
     public void delComment(@PathVariable Long id) {
-        commentImpl.delComment(id);  
+        commentImpl.delComment(id);
     }
-    
+
     public static class CommentUpdateRequest {
+
         private String comment;
         private Date commentDate;
 
