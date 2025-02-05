@@ -11,7 +11,7 @@ public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id_comment;
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date commentDate;
     @Column(columnDefinition = "TEXT")
     private String comment;
