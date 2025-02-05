@@ -2,6 +2,7 @@ package com.redsocial.bohemia.domain.service;
 
 import com.redsocial.bohemia.domain.repository.CommentRepository;
 import com.redsocial.bohemia.persistence.entity.Comment;
+import com.redsocial.bohemia.persistence.entity.Post;
 import jakarta.transaction.Transactional;
 import java.util.Date;
 import java.util.List;
@@ -55,6 +56,11 @@ public class CommentServiceImpl implements CommentService {
         System.out.println("Comment with ID " + id_comment + " not found.");
         return Optional.empty();
 
+    }
+
+    @Override
+    public List<Comment> getCommentsByPost(Post post) {
+        return commentRepository.findByPost(post);
     }
 
 }

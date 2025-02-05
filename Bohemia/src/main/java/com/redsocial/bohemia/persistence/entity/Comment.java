@@ -4,7 +4,6 @@ package com.redsocial.bohemia.persistence.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import java.util.Date;
-import java.util.List;
 
 @Entity
 @Table(name = "comment")
@@ -12,9 +11,6 @@ public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id_comment;
-    @ManyToOne
-    @JoinColumn(name = "id_user")
-    private User user;
     @Temporal(TemporalType.DATE)
     private Date commentDate;
     @Column(columnDefinition = "TEXT")
@@ -22,8 +18,11 @@ public class Comment {
     @Column(nullable = true)
     private int likes;
     @ManyToOne
-    @JoinColumn(name = "id_post")
+    @JoinColumn(name = "postId")
     private Post post;
+    @ManyToOne
+    @JoinColumn(name = "id_user")
+    private User user;
     @PrePersist
     public void prePersist() {
         this.commentDate = new Date();
@@ -93,3 +92,4 @@ public class Comment {
         return "Comment{" + "id_comment=" + id_comment + ", user=" + user + ", commentDate=" + commentDate + ", comment=" + comment + ", likes=" + likes + ", post=" + post + '}';
     }
 }
+    
