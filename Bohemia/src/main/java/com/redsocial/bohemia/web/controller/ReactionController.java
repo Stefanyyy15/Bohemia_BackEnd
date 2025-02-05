@@ -15,30 +15,40 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/reaction")
 public class ReactionController {
-    
+
     private final ReactionServiceImpl reactionImpl;
-    
+
     public ReactionController(ReactionServiceImpl reactionImpl) {
         this.reactionImpl = reactionImpl;
     }
-    
+
     @GetMapping
     public List<Reaction> getAllReaction() {
         return reactionImpl.listReaction();
     }
-    
+
     @GetMapping("/{id}")
-    public Optional<Reaction> getReactionById (@PathVariable Long id) {
+    public Optional<Reaction> getReactionById(@PathVariable Long id) {
         return reactionImpl.findReaction(id);
     }
-    
+
     @PostMapping(consumes = "application/json", produces = "application/json")
     public Reaction createReaction(@RequestBody Reaction reaction) {
         return reactionImpl.saveReaction(reaction);
     }
-    
+
+    @GetMapping("/post/{postId}/likes")
+    public long getLikesByPost(@PathVariable Long postId) {
+        return reactionImpl.countLikesByPost(postId);
+    }
+
+    @PostMapping("/like")
+    public Reaction addLike(@RequestBody Reaction reaction) {
+        return reactionImpl.saveReaction(reaction);
+    }
+
     @DeleteMapping("/{id}")
-    public void deleteReaction (@PathVariable Long id) {
+    public void deleteReaction(@PathVariable Long id) {
         reactionImpl.delReaction(id);
     }
 }

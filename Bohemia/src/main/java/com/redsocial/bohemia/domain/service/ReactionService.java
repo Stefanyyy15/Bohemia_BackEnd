@@ -10,4 +10,7 @@ public interface ReactionService {
     void delReaction (Long id_reaction);
     List<Reaction> listReaction();
     Optional<Reaction> findReaction(Long id_reaction);
+    Optional<Reaction> findUserReaction(Long userId, Long postId);
+    long countLikesByPost(Long postId);
 }
+

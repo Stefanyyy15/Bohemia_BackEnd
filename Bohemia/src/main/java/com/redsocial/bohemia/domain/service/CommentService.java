@@ -13,5 +13,5 @@ public interface CommentService {
     List<Comment> listComment();
     Optional<Comment> findComment(Long id_comment);
     Optional<Comment> updateComment(Long id_comment, Date newCommentDate, String newComment);
-    List<Comment> getCommentsByPost(Post post);
+    List<Comment> findCommentsByPost(Post post);
 }

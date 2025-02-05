@@ -7,12 +7,12 @@ import com.redsocial.bohemia.persistence.entity.User;
 import com.redsocial.bohemia.domain.repository.UserRepository;
 import com.redsocial.bohemia.domain.repository.PostRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
-import org.springframework.http.ResponseEntity;
 
 @RestController
 @RequestMapping("api/comment")
@@ -39,6 +39,17 @@ public class CommentController {
         return commentImpl.findComment(id);
     }
 
+    // Obtener comentarios de un post específico
+    @GetMapping("/post/{postId}")
+    public ResponseEntity<List<Comment>> getCommentsByPostId(@PathVariable Long postId) {
+        Optional<Post> postOpt = postRepository.findById(postId);
+        if (!postOpt.isPresent()) {
+            return ResponseEntity.notFound().build(); 
+        }
+        List<Comment> comments = commentImpl.findCommentsByPost(postOpt.get());
+        return comments.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok(comments);
+    }
+
     @PostMapping(consumes = "application/json", produces = "application/json")
     public Comment createComment(@RequestBody Comment comment) {
         if (comment.getComment() == null || comment.getComment().trim().isEmpty()) {
@@ -50,6 +61,7 @@ public class CommentController {
         }
         User user = userOpt.get();
         comment.setUser(user);
+
         Optional<Post> postOpt = postRepository.findById(comment.getPost().getPostId());
         if (!postOpt.isPresent()) {
             throw new IllegalArgumentException("El post no existe");
@@ -59,11 +71,9 @@ public class CommentController {
 
         return commentImpl.saveComment(comment);
     }
-    
+
     @DeleteMapping("/{id}")
     public void delComment(@PathVariable Long id) {
         commentImpl.delComment(id);
     }
-    
-    
 }

@@ -13,7 +13,7 @@ public class BohemiaApplication {
         ConfigurableApplicationContext context = SpringApplication.run(BohemiaApplication.class, args);
         PostServiceImpl postService = context.getBean(PostServiceImpl.class);
 
-//                postService.delPost(10L);
+//                postService.delPost(7L);
 //                postService.delPost(11L);
 //                postService.delPost(12L);
 
