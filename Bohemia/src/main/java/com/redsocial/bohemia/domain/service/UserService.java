@@ -13,9 +13,10 @@ public interface UserService {
     Optional<User> findUserByUsername(String username);
     Optional<User> findUserByMail(String mail);
     Optional<User> updateUser(Long userId, String fullname, String username, String mail, String password, String profilePhoto, String biography);
-    List<User> getUsersFollowing(Long userId);
+     List<User> getUsersFollowing(Long userId);
     List<User> getUsersFollowers(Long userId);
     boolean followUser(Long currentUserId, Long targetUserId);
     boolean unfollowUser(Long currentUserId, Long targetUserId);
     Optional<User> searchUsersByUsername(String username);
+    List<User> searchUsers(String term);
 }

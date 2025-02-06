@@ -64,6 +64,7 @@ public class UserServiceImpl implements UserService {
         return Optional.empty();
     }
 
+    
     @Override
     public List<User> getUsersFollowing(Long userId) {
         Optional<User> userOpt = userRepository.findById(userId);
@@ -81,6 +82,7 @@ public class UserServiceImpl implements UserService {
         }
         return List.of();
     }
+
 
     @Override
     public Optional<User> searchUsersByUsername(String username) {
@@ -106,6 +108,7 @@ public class UserServiceImpl implements UserService {
         return false;
     }
 
+
     @Transactional
     @Override
     public boolean unfollowUser(Long currentUserId, Long targetUserId) {
@@ -125,6 +128,11 @@ public class UserServiceImpl implements UserService {
         return false;
     }
 
+    @Override
+    public List<User> searchUsers(String term) {
+        return userRepository.searchUsers(term.toLowerCase());
+    }
+
     public boolean verifyUser(String name, String password) {
         User verifi = userRepository.findByMail(name).get();
 
@@ -138,6 +146,5 @@ public class UserServiceImpl implements UserService {
 
         return true;
     }
-    
-   
+
 }

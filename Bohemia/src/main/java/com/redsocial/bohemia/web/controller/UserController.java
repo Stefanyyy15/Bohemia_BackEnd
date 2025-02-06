@@ -97,18 +97,38 @@ public class UserController {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<Optional<User>> searchUsersByUsername(@RequestParam String term) {
-        Optional<User> users = userImpl.searchUsersByUsername(term);
+    public ResponseEntity<List<User>> searchUsers(@RequestParam String term) {
+        List<User> users = userImpl.searchUsers(term);
         return ResponseEntity.ok(users);
     }
 
     @GetMapping("/{userId}/followers")
     public ResponseEntity<List<User>> getFollowers(@PathVariable Long userId) {
-        List<User> followers = userImpl.getUsersFollowers(userId);
-        if (followers != null && !followers.isEmpty()) {
-            return ResponseEntity.ok(followers);
-        } else {
-            return ResponseEntity.notFound().build();
+        try {
+            List<User> followers = userImpl.getUsersFollowers(userId);
+            if (followers != null && !followers.isEmpty()) {
+                return ResponseEntity.ok(followers);
+            } else {
+                return ResponseEntity.notFound().build();
+            }
+        } catch (Exception e) {
+            System.out.println("Error al obtener seguidores: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
+
+    @GetMapping("/{userId}/following")
+    public ResponseEntity<List<User>> getFollowing(@PathVariable Long userId) {
+        try {
+            List<User> following = userImpl.getUsersFollowing(userId);
+            if (following != null && !following.isEmpty()) {
+                return ResponseEntity.ok(following);
+            } else {
+                return ResponseEntity.notFound().build();
+            }
+        } catch (Exception e) {
+            System.out.println("Error al obtener seguidos: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
 
@@ -123,6 +143,7 @@ public class UserController {
         boolean success = userImpl.unfollowUser(currentUserId, targetUserId);
         return success ? ResponseEntity.ok("Dejado de seguir correctamente") : ResponseEntity.badRequest().body("No se pudo dejar de seguir");
     }
+
 
     @GetMapping("/profile")
     public ResponseEntity<?> getUserProfile(HttpServletRequest request) {
