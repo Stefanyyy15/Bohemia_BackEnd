@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import org.springframework.http.HttpStatus;
 
 @RestController
 @RequestMapping("api/comment")
@@ -44,7 +45,7 @@ public class CommentController {
     public ResponseEntity<List<Comment>> getCommentsByPostId(@PathVariable Long postId) {
         Optional<Post> postOpt = postRepository.findById(postId);
         if (!postOpt.isPresent()) {
-            return ResponseEntity.notFound().build(); 
+            return ResponseEntity.notFound().build();
         }
         List<Comment> comments = commentImpl.findCommentsByPost(postOpt.get());
         return comments.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok(comments);
@@ -76,4 +77,21 @@ public class CommentController {
     public void delComment(@PathVariable Long id) {
         commentImpl.delComment(id);
     }
+
+    @PutMapping("/{id_comment}")
+    public ResponseEntity<Comment> actualizarComentario(
+            @PathVariable Long id_comment,
+            @RequestBody Comment comentario) {
+        Optional<Comment> comentarioActualizadoOpt = commentImpl.updateComment(
+                id_comment,
+                new Date(),
+                comentario.getComment()
+        );
+        if (comentarioActualizadoOpt.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(null);
+        }
+        return ResponseEntity.ok(comentarioActualizadoOpt.get());
+    }
+
 }

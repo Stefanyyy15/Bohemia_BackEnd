@@ -178,5 +178,22 @@ public class UserController {
         response.put("error", "Token no proporcionado");
         return ResponseEntity.status(401).body(response);
     }
+    
+    @GetMapping("/exists/username/{username}")
+    public ResponseEntity<Map<String, Boolean>> checkIfUsernameExists(@PathVariable String username) {
+        Optional<User> user = userImpl.findUserByUsername(username);
+        Map<String, Boolean> response = new HashMap<>();
+        response.put("exists", user.isPresent());
+        return ResponseEntity.ok(response);
+    }
+
+    // Verificar si el correo ya está registrado
+    @GetMapping("/exists/mail/{mail}")
+    public ResponseEntity<Map<String, Boolean>> checkIfEmailExists(@PathVariable String mail) {
+        Optional<User> user = userImpl.findUserByMail(mail);
+        Map<String, Boolean> response = new HashMap<>();
+        response.put("exists", user.isPresent()); 
+        return ResponseEntity.ok(response);
+    }
 
 }
