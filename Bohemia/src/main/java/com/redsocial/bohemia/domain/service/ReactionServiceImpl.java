@@ -2,7 +2,6 @@ package com.redsocial.bohemia.domain.service;
 
 import com.redsocial.bohemia.domain.repository.ReactionRepository;
 import com.redsocial.bohemia.persistence.entity.Reaction;
-import com.redsocial.bohemia.persistence.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,9 +13,6 @@ public class ReactionServiceImpl implements ReactionService {
 
     @Autowired
     private ReactionRepository reactionRepository;
-
-    @Autowired
-    private NotificationService notificationService;
     
     @Override
     public Reaction saveReaction(Reaction reaction) {
@@ -26,15 +22,7 @@ public class ReactionServiceImpl implements ReactionService {
             reactionRepository.delete(existingReaction.get());
             return null;
         } else {
-            Reaction savedReaction = reactionRepository.save(reaction);
-
-            // 🔔 Notificar al autor del post
-            User postAuthor = savedReaction.getPost().getUser();
-            if (!postAuthor.getId_user().equals(savedReaction.getUser().getId_user())) {
-                notificationService.notifyUser(postAuthor.getId_user(), "A alguien le gustó tu publicación.");
-            }
-
-            return savedReaction;
+            return reactionRepository.save(reaction);
         }
     }
     @Override

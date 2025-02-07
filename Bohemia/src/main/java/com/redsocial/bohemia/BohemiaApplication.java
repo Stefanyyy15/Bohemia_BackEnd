@@ -1,4 +1,4 @@
-package com.redsocial.bohemia;
+    package com.redsocial.bohemia;
 
 import com.redsocial.bohemia.domain.service.PostServiceImpl;
 import java.text.ParseException;
