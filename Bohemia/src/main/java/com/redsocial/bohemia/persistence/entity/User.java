@@ -45,6 +45,7 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Comment> comments;
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<Notification> notifications;
     @ManyToMany
     @JsonIgnore

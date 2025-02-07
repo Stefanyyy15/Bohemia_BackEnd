@@ -10,4 +10,6 @@ public interface NotificationService {
     void delNotification(Long id_notification);
     List<Notification> listNotification();
     Optional<Notification> findNotification(Long id_comment);
+    void notifyUser(Long userId, String message);
+    List<Notification> getUnreadNotifications(Long userId);
 }

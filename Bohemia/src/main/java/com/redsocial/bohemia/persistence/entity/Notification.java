@@ -1,6 +1,7 @@
 
 package com.redsocial.bohemia.persistence.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import java.util.Date;
 
