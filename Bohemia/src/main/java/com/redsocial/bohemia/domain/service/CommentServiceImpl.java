@@ -16,10 +16,21 @@ public class CommentServiceImpl implements CommentService {
     @Autowired
     private CommentRepository commentRepository;
 
+    @Autowired
+    private NotificationService notificationService; 
+
     @Override
     public Comment saveComment(Comment comment) {
         try {
-            return commentRepository.save(comment);
+            Comment savedComment = commentRepository.save(comment);
+
+            Long targetUserId = comment.getPost().getUser().getId_user();
+            if (!comment.getUser().getId_user().equals(targetUserId)) {
+                String message = comment.getUser().getUsername() + " comentó en tu post: " + comment.getComment();
+                notificationService.notifyUser(targetUserId, message); 
+            }
+
+            return savedComment;
         } catch (Exception e) {
             e.printStackTrace();
             throw new RuntimeException("Error al guardar el comentario");
@@ -55,12 +66,10 @@ public class CommentServiceImpl implements CommentService {
         }
         System.out.println("Comment with ID " + id_comment + " not found.");
         return Optional.empty();
-
     }
 
     @Override
     public List<Comment> findCommentsByPost(Post post) {
         return commentRepository.findByPost(post);
     }
-
 }

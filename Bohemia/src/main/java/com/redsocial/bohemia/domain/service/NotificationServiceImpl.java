@@ -44,11 +44,28 @@ public class NotificationServiceImpl implements NotificationService {
         return notificationRepository.findById(id_notification);
     }
 
+    @Override
     public void notifyUser(Long userId, String message) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
-        Notification notification = new Notification(message, user, new Date());
-        notificationRepository.save(notification);
+        System.out.println("Intentando notificar al usuario con ID: " + userId + " con mensaje: " + message);
+        Optional<User> userOpt = userRepository.findById(userId);
+        if (userOpt.isPresent()) {
+            Notification notification = new Notification();
+            notification.setUser(userOpt.get());
+            notification.setMessage(message);
+            notification.setRead(false);
+            notification.setDateNotification(new Date());
+
+            // Intentamos guardar la notificación
+            try {
+                Notification savedNotification = saveNotification(notification);
+                System.out.println("Notificación guardada: " + savedNotification);
+            } catch (Exception e) {
+                e.printStackTrace();
+                System.out.println("Error al guardar la notificación.");
+            }
+        } else {
+            System.out.println("Usuario no encontrado para notificación.");
+        }
     }
 
     public List<Notification> getUnreadNotifications(Long userId) {

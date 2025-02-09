@@ -54,15 +54,18 @@ public class User {
         joinColumns = @JoinColumn(name = "user_id"),
         inverseJoinColumns = @JoinColumn(name = "following_user_id")
     )
-    private List<User> following; // Lista de usuarios a los que este usuario sigue
+    private List<User> following; 
 
     @ManyToMany(mappedBy = "following")
     @JsonIgnore
-    private List<User> followers; // Lista de seguidores de este usuario
+    private List<User> followers; 
 
     public User() {
     }
 
+    public User(Long id_user) {
+        this.id_user = id_user;
+    }
     public User(String fullname, String username, String mail, String password, String profilePhoto, String biography, List<Post> posts, List<Comment> comments, List<Notification> notifications) {
         this.fullname = fullname;
         this.username = username;
@@ -92,6 +95,7 @@ public class User {
     public Long getId_user() {
         return id_user;
     }
+    
 
     public void setId_user(Long id_user) {
         this.id_user = id_user;

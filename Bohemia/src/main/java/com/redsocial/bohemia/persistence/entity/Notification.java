@@ -1,6 +1,6 @@
-
 package com.redsocial.bohemia.persistence.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import java.util.Date;
@@ -8,17 +8,19 @@ import java.util.Date;
 @Entity
 @Table(name = "notification")
 public class Notification {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id_notification;
     private String message;
     private boolean read = false;
     @ManyToOne
-    @JoinColumn(name = "id_user", nullable = false)
+    @JoinColumn(name = "id_user")
     private User user;
+
     @Temporal(TemporalType.DATE)
     private Date dateNotification;
-    
+
     @PrePersist
     public void prePersist() {
         this.dateNotification = new Date();

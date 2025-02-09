@@ -56,7 +56,10 @@ public class NotificationController {
 
     @GetMapping("/unread/{userId}")
     public List<Notification> getUnreadNotifications(@PathVariable Long userId) {
-        return notificationImpl.getUnreadNotifications(userId);
+        System.out.println("Recibiendo solicitud de notificaciones no leídas para el usuario: " + userId);
+        List<Notification> notifications = notificationImpl.getUnreadNotifications(userId);
+        System.out.println("Notificaciones enviadas: " + notifications);
+        return notifications;
     }
 
 }
