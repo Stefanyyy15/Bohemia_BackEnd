@@ -4,51 +4,51 @@ import com.redsocial.bohemia.domain.service.ReactionServiceImpl;
 import com.redsocial.bohemia.persistence.entity.Reaction;
 import java.util.List;
 import java.util.Optional;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/reaction")
 public class ReactionController {
 
-    private final ReactionServiceImpl reactionImpl;
+    private final ReactionServiceImpl reactionService;
 
-    public ReactionController(ReactionServiceImpl reactionImpl) {
-        this.reactionImpl = reactionImpl;
+    public ReactionController(ReactionServiceImpl reactionService) {
+        this.reactionService = reactionService;
     }
 
     @GetMapping
-    public List<Reaction> getAllReaction() {
-        return reactionImpl.listReaction();
+    public ResponseEntity<List<Reaction>> getAllReactions() {
+        return ResponseEntity.ok(reactionService.listReaction());
     }
 
     @GetMapping("/{id}")
-    public Optional<Reaction> getReactionById(@PathVariable Long id) {
-        return reactionImpl.findReaction(id);
+    public ResponseEntity<Reaction> getReactionById(@PathVariable Long id) {
+        return reactionService.findReaction(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping(consumes = "application/json", produces = "application/json")
-    public Reaction createReaction(@RequestBody Reaction reaction) {
-        return reactionImpl.saveReaction(reaction);
+    public ResponseEntity<Reaction> createReaction(@RequestBody Reaction reaction) {
+        Reaction savedReaction = reactionService.saveReaction(reaction);
+        return savedReaction != null ? ResponseEntity.ok(savedReaction) : ResponseEntity.noContent().build();
     }
 
     @GetMapping("/post/{postId}/likes")
-    public long getLikesByPost(@PathVariable Long postId) {
-        return reactionImpl.countLikesByPost(postId);
+    public ResponseEntity<Long> getLikesByPost(@PathVariable Long postId) {
+        return ResponseEntity.ok(reactionService.countLikesByPost(postId));
     }
 
     @PostMapping("/like")
-    public Reaction addLike(@RequestBody Reaction reaction) {
-        return reactionImpl.saveReaction(reaction);
+    public ResponseEntity<Reaction> addLike(@RequestBody Reaction reaction) {
+        Reaction savedReaction = reactionService.saveReaction(reaction);
+        return savedReaction != null ? ResponseEntity.ok(savedReaction) : ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/{id}")
-    public void deleteReaction(@PathVariable Long id) {
-        reactionImpl.delReaction(id);
+    public ResponseEntity<Void> deleteReaction(@PathVariable Long id) {
+        reactionService.delReaction(id);
+        return ResponseEntity.noContent().build();
     }
 }

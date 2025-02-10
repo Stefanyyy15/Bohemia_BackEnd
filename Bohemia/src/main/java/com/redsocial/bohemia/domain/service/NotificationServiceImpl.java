@@ -68,6 +68,13 @@ public class NotificationServiceImpl implements NotificationService {
         }
     }
 
+    @Override
+    public List<Notification> getNotificationsByUser(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+        return notificationRepository.findByUser(user);
+    }
+
     public List<Notification> getUnreadNotifications(Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));

@@ -17,17 +17,20 @@ public class CommentServiceImpl implements CommentService {
     private CommentRepository commentRepository;
 
     @Autowired
-    private NotificationService notificationService; 
+    private NotificationService notificationService;
 
     @Override
     public Comment saveComment(Comment comment) {
         try {
             Comment savedComment = commentRepository.save(comment);
 
-            Long targetUserId = comment.getPost().getUser().getId_user();
-            if (!comment.getUser().getId_user().equals(targetUserId)) {
-                String message = comment.getUser().getUsername() + " comentó en tu post: " + comment.getComment();
-                notificationService.notifyUser(targetUserId, message); 
+            Long targetUserId = savedComment.getPost().getUser().getId_user();
+
+            if (!savedComment.getUser().getId_user().equals(targetUserId)) {
+                new Thread(() -> {
+                    String message = savedComment.getUser().getUsername() + " comentó en tu post: " + savedComment.getComment();
+                    notificationService.notifyUser(targetUserId, message);
+                }).start();
             }
 
             return savedComment;

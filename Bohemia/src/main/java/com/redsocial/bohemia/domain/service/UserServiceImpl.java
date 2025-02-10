@@ -1,6 +1,8 @@
 package com.redsocial.bohemia.domain.service;
 
 import com.redsocial.bohemia.persistence.entity.User;
+import com.redsocial.bohemia.persistence.entity.Notification;
+
 import com.redsocial.bohemia.domain.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +16,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private NotificationService notificationService;
 
     @Override
     public User saveUser(User user) {
@@ -64,7 +69,6 @@ public class UserServiceImpl implements UserService {
         return Optional.empty();
     }
 
-    
     @Override
     public List<User> getUsersFollowing(Long userId) {
         Optional<User> userOpt = userRepository.findById(userId);
@@ -82,7 +86,6 @@ public class UserServiceImpl implements UserService {
         }
         return List.of();
     }
-
 
     @Override
     public Optional<User> searchUsersByUsername(String username) {
@@ -102,12 +105,19 @@ public class UserServiceImpl implements UserService {
             if (!currentUser.getFollowing().contains(targetUser)) {
                 currentUser.getFollowing().add(targetUser);
                 userRepository.save(currentUser);
+
+                Notification notification = new Notification();
+                notification.setUser(targetUser);  
+                notification.setMessage(currentUser.getUsername() + " ahora te sigue.");
+
+                targetUser.getNotifications().add(notification);
+                userRepository.save(targetUser); 
+
                 return true;
             }
         }
         return false;
     }
-
 
     @Transactional
     @Override

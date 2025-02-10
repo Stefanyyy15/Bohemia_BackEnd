@@ -12,4 +12,7 @@ public interface NotificationService {
     Optional<Notification> findNotification(Long id_comment);
     void notifyUser(Long userId, String message);
     List<Notification> getUnreadNotifications(Long userId);
+    List<Notification> getNotificationsByUser(Long userId);
+
+    
 }

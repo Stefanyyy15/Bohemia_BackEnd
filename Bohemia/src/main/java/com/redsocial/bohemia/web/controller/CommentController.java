@@ -52,25 +52,26 @@ public class CommentController {
     }
 
     @PostMapping(consumes = "application/json", produces = "application/json")
-    public Comment createComment(@RequestBody Comment comment) {
+    public ResponseEntity<Comment> createComment(@RequestBody Comment comment) {
         if (comment.getComment() == null || comment.getComment().trim().isEmpty()) {
-            throw new IllegalArgumentException("El comentario no puede estar vacío");
+            return ResponseEntity.badRequest().build();
         }
+
         Optional<User> userOpt = userRepository.findById(comment.getUser().getId_user());
-        if (!userOpt.isPresent()) {
-            throw new IllegalArgumentException("El usuario no existe");
+        if (userOpt.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
-        User user = userOpt.get();
-        comment.setUser(user);
 
         Optional<Post> postOpt = postRepository.findById(comment.getPost().getPostId());
-        if (!postOpt.isPresent()) {
-            throw new IllegalArgumentException("El post no existe");
+        if (postOpt.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
-        Post post = postOpt.get();
-        comment.setPost(post);
 
-        return commentImpl.saveComment(comment);
+        comment.setUser(userOpt.get());
+        comment.setPost(postOpt.get());
+
+        Comment savedComment = commentImpl.saveComment(comment);
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedComment);
     }
 
     @DeleteMapping("/{id}")

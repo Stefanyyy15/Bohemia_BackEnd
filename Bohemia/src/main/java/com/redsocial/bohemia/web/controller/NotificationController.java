@@ -5,6 +5,7 @@ import com.redsocial.bohemia.persistence.entity.Notification;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -30,9 +31,15 @@ public class NotificationController {
         return notificationImpl.listNotification();
     }
 
+    @GetMapping("/users/{userId}")
+    public List<Notification> getNotificationsByUser(@PathVariable Long userId) {
+        System.out.println("Obteniendo TODAS las notificaciones para el usuario: " + userId);
+        return notificationImpl.getNotificationsByUser(userId);
+    }
+
     @GetMapping("/{id}")
-    public Optional<Notification> getfindById(@PathVariable Long id_notification) {
-        return notificationImpl.findNotification(id_notification);
+    public Optional<Notification> getfindById(@PathVariable("id") Long id) {
+        return notificationImpl.findNotification(id);
     }
 
     @PostMapping(consumes = "application/json", produces = "application/json")
@@ -45,13 +52,23 @@ public class NotificationController {
         notificationImpl.delNotification(id);
     }
 
+    @GetMapping("/all")
+    public List<Notification> getAllNotifications() {
+        return notificationImpl.listNotification();
+    }
+
     @PutMapping("/read/{id}")
-    public void markAsRead(@PathVariable Long id) {
-        Optional<Notification> notification = notificationImpl.findNotification(id);
-        notification.ifPresent(n -> {
-            n.setRead(true);
-            notificationImpl.saveNotification(n);
-        });
+    public String markAsRead(@PathVariable Long id) {
+        Optional<Notification> notificationOpt = notificationImpl.findNotification(id);
+
+        if (notificationOpt.isPresent()) {
+            Notification notification = notificationOpt.get();
+            notification.setRead(true);
+            notificationImpl.saveNotification(notification);
+            return "Notificación marcada como leída.";
+        }
+
+        return "Error: Notificación no encontrada.";
     }
 
     @GetMapping("/unread/{userId}")

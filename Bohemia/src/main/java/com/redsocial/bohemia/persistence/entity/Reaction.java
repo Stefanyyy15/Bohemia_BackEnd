@@ -34,6 +34,7 @@ public class Reaction {
         this.id_reaction = id_reaction;
     }
 
+    
     public User getUser() {
         return user;
     }
@@ -49,6 +50,7 @@ public class Reaction {
     public void setPost(Post post) {
         this.post = post;
     }
+
 
     @Override
     public String toString() {
