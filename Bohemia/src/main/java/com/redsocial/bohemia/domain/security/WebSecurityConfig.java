@@ -1,4 +1,3 @@
-
 package com.redsocial.bohemia.domain.security;
 
 import org.springframework.context.annotation.Bean;
@@ -28,14 +27,15 @@ class WebSecurityConfig {
     @Bean
     public SecurityFilterChain configure(HttpSecurity http) throws Exception {
         http
-            .cors(cors -> cors.configurationSource(corsConfigurationSource())) 
-            .csrf(csrf -> csrf.disable()) 
-            .authorizeHttpRequests(authz -> authz
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+                .csrf(csrf -> csrf.disable())
+                .authorizeHttpRequests(authz -> authz
                 .requestMatchers(HttpMethod.POST, LOGIN_URL).permitAll()
                 .requestMatchers("/doc/swagger-ui.html", "/v3/api-docs/**", "/swagger-ui/**").permitAll()
-                .anyRequest().authenticated() 
-            )
-            .addFilterAfter(jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class);
+                .requestMatchers(HttpMethod.GET, "/api/public/**").permitAll() // Permitir ciertas rutas
+                .anyRequest().authenticated()
+                )
+                .addFilterAfter(jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
@@ -63,4 +63,4 @@ class WebSecurityConfig {
         source.registerCorsConfiguration("/**", config);
         return source;
     }
-}   
+}
